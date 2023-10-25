@@ -1,7 +1,7 @@
-//Importar bibliotecas
-
 const express= require("express");
 const app = express();
+//Traer el objeto de conexión
+const sequelize = require("./util/database");
 
 //Middleware
 app.use(express.json());
@@ -12,6 +12,12 @@ app.get("/test", (req, res) => {
 });
 
 //Levantar servidor y escuchar peticiones
-app.listen(8080, () => {
-    console.log("Servidor iniciado");
-});
+sequelize.sync()
+    .then(res => {
+        app.listen(8080, () => {
+            console.log("Servidor iniciado");
+        });
+    })
+    .catch(err => {
+        console.log(err);
+    });
